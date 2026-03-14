@@ -1,17 +1,15 @@
 
+import { RouterProvider } from 'react-router-dom'
 import './App.css'
+import router from './routes'
+
 
 function App() {
  
 
   return (
     <>
-     <h1 className="
-       text-lg ...
-       text-center
-      no-underline hover:underline">
-    Hello world!
-  </h1>
+      <RouterProvider router={router} />
     </>
   )
 }
