@@ -1,13 +1,13 @@
-
+import Hero from "./components/Hero"
+import Product from "./components/Product"
 
 const Home = () => {
   return (
-    <div>
-        <h1 className="
-       text-center
-      no-underline hover:underline"> This is Home Page.......</h1>
-    </div>
-  );
-};
+    <>
+    <Hero/>
+    <Product />
+    </>
+  )
+}
 
-export default Home;
+export default Home
