@@ -1,7 +1,11 @@
 import { Link, NavLink } from "react-router-dom";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const items = useSelector((state)=>state.cart);
+  console.log(items)
+
   return (
     <nav className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
@@ -71,7 +75,7 @@ const Navbar = () => {
             }
           >
             <ShoppingCartIcon className="h-5 w-5" />
-            Cart
+            Cart <sup> {items.length} </sup>
           </NavLink>
 
         </div>
