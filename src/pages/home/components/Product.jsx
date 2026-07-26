@@ -1,33 +1,31 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { add } from "../../../store/cartSlice";
+import { fetchProducts } from "../../../store/productSlice";
+
 
 export default function Product() {
-  const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
+  const {data : products, status} = useSelector((state)=>state.product)
 
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get("http://localhost:2000/api/product");
-
-      if (response.status === 200) {
-        setProducts(response.data.data);
-      }
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
 
   useEffect(() => {
-    fetchProducts();
+    dispatch(fetchProducts())
   }, []);
 
   const addToCart = (product)=>{
     dispatch(add(product));
   }
 
+  if(status == "loading"){
+    return <h1>Loading....</h1>
+  }
+
+  if(status == "error"){
+    return <h1> Error!! Something went Wrong </h1>
+  }
   return (
     <section className="bg-gray-50 py-16">
       <div className="max-w-7xl mx-auto px-6">
