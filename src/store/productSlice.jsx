@@ -1,11 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-
-const STATUSES = Object.freeze({
-    SUCCESS : 'success',
-    ERROR : 'error',
-    LOADING : 'loading'
-})
+import { STATUSES } from '../globals/components/misc/statuses'
 
 export const productSlice = createSlice({
   name: 'product',
