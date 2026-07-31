@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
 import { STATUSES } from '../globals/components/misc/statuses'
+import API from '../http'
 
 export const productSlice = createSlice({
   name: 'product',
   initialState : {
     data : [],
-    status : STATUSES.SUCCESS
+    status : STATUSES.SUCCESS,
+    selectedProduct : {}
   },
 
   reducers: {
@@ -15,6 +16,9 @@ export const productSlice = createSlice({
        },
        setStatus(state,action){
         state.status = action.payload
+       },
+       setselectedProduct(state, action){
+        state.selectedProduct = action.payload
        }
     },
 
@@ -44,15 +48,17 @@ export const productSlice = createSlice({
 //   },
 })
 
-export const { setProducts,setStatus } = productSlice.actions
+export const { setProducts,setStatus, setselectedProduct } = productSlice.actions
 
 export default productSlice.reducer
 
+
+//all products aysnc fetch
 export const fetchProducts = createAsyncThunk(
   "products/fetch",
   async () => {
     try {
-      const response = await axios.get("http://localhost:2000/api/product");
+      const response = await API.get("/product");
       const data = response.data.data;
       return data;
     } catch (err) {
@@ -62,16 +68,18 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
-// export function fetchProducts(){
-//     return async function fetchProductThunk(dispatch){
-//         dispatch(setStatus(STATUSES.LOADING))
-//         try {
-//           const response = await axios.get("http://localhost:2000/api/products")
-//           dispatch(setProducts(response.data.data))
-//           dispatch(setStatus(STATUSES.SUCCESS))
-//         } catch (error) {
-//            console.log(error)
-//            dispatch(setStatus(STATUSES.ERROR)) 
-//         }
-//     }
-// }
+
+//single product aync fetch
+export function fetchProductDetails(productId){
+    return async function fetchProductDetailsThunk(dispatch){
+        dispatch(setStatus(STATUSES.LOADING))
+        try {
+          const response = await API.get(`/product/${productId}`)
+          dispatch(setselectedProduct(response.data.data))
+          dispatch(setStatus(STATUSES.SUCCESS))
+        } catch (error) {
+           console.log(error)
+           dispatch(setStatus(STATUSES.ERROR)) 
+        }
+    }
+}

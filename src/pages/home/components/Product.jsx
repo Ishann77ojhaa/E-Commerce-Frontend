@@ -1,31 +1,30 @@
-
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { add } from "../../../store/cartSlice";
 import { fetchProducts } from "../../../store/productSlice";
-
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Product() {
+  const navigate = useNavigate()
   const dispatch = useDispatch();
-  const {data : products, status} = useSelector((state)=>state.product)
-
+  const { data: products, status } = useSelector((state) => state.product);
 
   useEffect(() => {
-    dispatch(fetchProducts())
+    dispatch(fetchProducts());
   }, []);
 
-  const addToCart = (product)=>{
+  const addToCart = (product) => {
     dispatch(add(product));
+  };
+
+  if (status == "loading") {
+    return <h1>Loading....</h1>;
   }
 
-  if(status == "loading"){
-    return <h1>Loading....</h1>
+  if (status == "error") {
+    return <h1> Error!! Something went Wrong </h1>;
   }
 
-  if(status == "error"){
-    return <h1> Error!! Something went Wrong </h1>
-  }
   return (
     <section className="bg-gray-50 py-16">
       <div className="max-w-7xl mx-auto px-6">
@@ -40,60 +39,64 @@ export default function Product() {
           </button>
         </div>
 
-        {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {products.map((product) => (
-            <div
-              key={product._id}
-              className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
-            >
-              <img
-                src={`http://${product.Product_Image}`}
-                alt={product.Product_Name}
-                className="w-full h-56 object-cover"
-              />
 
-              <div className="p-5 flex flex-col h-56">
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-800">
-                    {product.Product_Name}
-                  </h3>
+          {/* Product Grid */}
+          <div  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {products.map((product) => (
+              <div
+                key={product._id} 
+                className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
+              >
+                <img
+                  src={`http://${product.Product_Image}`}
+                  alt={product.Product_Name}
+                  className="w-full h-56 object-cover"
+                  onClick={()=>navigate(`/productdetails/${product._id}`)}
+                />
 
-                  <p className="text-gray-600 mt-2 line-clamp-2">
-                    {product.Product_Description}
-                  </p>
-                </div>
+                <div className="p-5 flex flex-col h-56">
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-800">
+                      {product.Product_Name}
+                    </h3>
 
-                <div className="mt-auto">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-xl font-bold text-gray-900">
-                      Rs. {product.Product_Price}
-                    </span>
-
-                    <span
-                      className={`text-sm font-medium ${
-                        product.Product_Status === "Available"
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {product.Product_Status}
-                    </span>
+                    <p className="text-gray-600 mt-2 line-clamp-2">
+                      {product.Product_Description}
+                    </p>
                   </div>
 
-                  <button onClick={() => addToCart(product)} className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 rounded-lg transition">
-                    Add to Cart
-                  </button>
+                  <div className="mt-auto">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-xl font-bold text-gray-900">
+                        Rs. {product.Product_Price}
+                      </span>
+
+                      <span
+                        className={`text-sm font-medium ${
+                          product.Product_Status === "Available"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        {product.Product_Status}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => addToCart(product)}
+                      className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 rounded-lg transition"
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+
 
         {products.length === 0 && (
-          <p className="text-center text-gray-500 mt-10">
-            No products found.
-          </p>
+          <p className="text-center text-gray-500 mt-10">No products found.</p>
         )}
       </div>
     </section>
