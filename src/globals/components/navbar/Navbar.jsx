@@ -1,10 +1,24 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../../store/authSlice";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const {data: user} = useSelector((state=>state.auth))
   const items = useSelector((state)=>state.cart);
-  console.log(items)
+
+  const handleLogout = () => {
+    const confirmLogout = window.confirm(
+        "Are you sure you want to logout?"
+    );
+    if (!confirmLogout) return;
+  dispatch(logout());
+  navigate("/login");
+  };
+
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
@@ -82,7 +96,23 @@ const Navbar = () => {
 
         {/* Buttons */}
         <div className="flex items-center gap-4">
-
+        {user ? (
+          <>
+            <Link
+              to="/profile"
+              className="font-medium hover:text-blue-600"
+            >
+              👤 {user.name}
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600"
+            >
+              Logout
+            </button>
+           </>
+        ) : (
+          <>
           <Link
             to="/login"
             className="px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-gray-100 hover:text-blue-600"
@@ -96,7 +126,8 @@ const Navbar = () => {
           >
             Sign Up
           </Link>
-
+        </>
+        )}
         </div>
 
       </div>

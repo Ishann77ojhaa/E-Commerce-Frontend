@@ -24,10 +24,7 @@ const Login = () => {
   const handleSubmit = (e)=>{
     e.preventDefault()
     dispatch(loginUser(userData))
-    if(status === STATUSES.SUCCESS){
-      localStorage.setItem('token', token)
-    return navigate("/")
-    }
+    navigate("/")
     if(status === STATUSES.ERROR){
       alert("Something went wrong, Try again")
     }
@@ -35,7 +32,6 @@ const Login = () => {
 
   return (
   <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100"> 
-      <h3>Hello, {data?.user_name} </h3>  
 
       <form className="p-8 bg-white rounded-lg shadow-lg w-96" 
       onSubmit={handleSubmit}>

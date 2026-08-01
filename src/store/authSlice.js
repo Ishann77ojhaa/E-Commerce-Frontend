@@ -21,11 +21,16 @@ export const authSlice = createSlice({
        },
        setToken(state,action){
         state.token = action.payload
-       }
+       },
+       logout(state) {
+        state.data = null;
+        state.token = "";
+        localStorage.removeItem("token");
+    }
     },
 })
 
-export const { setUser,setStatus, setToken } = authSlice.actions
+export const { setUser,setStatus, setToken, logout } = authSlice.actions
 export default authSlice.reducer
 
 export function registerUser(data){
@@ -33,7 +38,7 @@ export function registerUser(data){
         dispatch(setStatus(STATUSES.LOADING))
         try{
             const response = await axios.post("http://localhost:2000/api/auth/register",data)
-            dispatch(setUser(response.data.data))
+            
             dispatch(setStatus(STATUSES.SUCCESS))
         } catch(error){
           console.log(error)
@@ -47,8 +52,10 @@ export function loginUser(data){
         dispatch(setStatus(STATUSES.LOADING))
         try{
             const response = await API.post("/auth/login",data)
-            dispatch(setToken(response.data.data))
+            dispatch(setUser(response.data.data))
+            dispatch(setToken(response.data.token))
             dispatch(setStatus(STATUSES.SUCCESS))
+            localStorage.setItem('token', response.data.token)
         } catch(error){
           console.log(error)
           dispatch(setStatus(STATUSES.ERROR))

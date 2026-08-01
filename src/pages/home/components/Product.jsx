@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { add } from "../../../store/cartSlice";
 import { fetchProducts } from "../../../store/productSlice";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -12,10 +11,6 @@ export default function Product() {
   useEffect(() => {
     dispatch(fetchProducts());
   }, []);
-
-  const addToCart = (product) => {
-    dispatch(add(product));
-  };
 
   if (status == "loading") {
     return <h1>Loading....</h1>;
@@ -81,13 +76,6 @@ export default function Product() {
                         {product.Product_Status}
                       </span>
                     </div>
-
-                    <button
-                      onClick={() => addToCart(product)}
-                      className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 rounded-lg transition"
-                    >
-                      Add to Cart
-                    </button>
                   </div>
                 </div>
               </div>
