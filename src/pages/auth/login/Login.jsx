@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { loginUser } from "../../../store/authSlice";
 import { STATUSES } from "../../../globals/components/misc/statuses";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+   const location = useLocation();
+
   const {data, token, status} = useSelector((state)=>state.auth)
   const [userData, setUserData] = useState({
     user_email : "",
@@ -21,14 +23,20 @@ const Login = () => {
     })
   }
 
-  const handleSubmit = (e)=>{
-    e.preventDefault()
-    dispatch(loginUser(userData))
-    navigate("/")
-    if(status === STATUSES.ERROR){
-      alert("Something went wrong, Try again")
-    }
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const success = await dispatch(loginUser(userData));
+
+  if (success) {
+    const from = location.state?.from || "/";
+
+    navigate(from, { replace: true });
+  } else {
+    alert("Invalid email or password");
   }
+};
+
 
   return (
   <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100"> 

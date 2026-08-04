@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchProductDetails } from '../../../../store/productSlice'
-import { add } from '../../../../store/cartSlice'
+import { addToCart } from '../../../../store/cartSlice'
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Sproduct = ({id:productId}) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const {selectedProduct, status} = useSelector(
     (state)=>state.product
@@ -20,9 +23,20 @@ const Sproduct = ({id:productId}) => {
     }
   },[dispatch, productId])
 
-    const addToCart = (product) => {
-    dispatch(add(product));
-  };
+  const handleCart = () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    navigate("/login", {
+      state: {
+        from: location.pathname,
+      },
+    });
+    return;
+  }
+
+  dispatch(addToCart(productId));
+};
 
   if (status === "loading") {
   return (
@@ -107,7 +121,7 @@ if (status === "failed") {
         <div className="flex">
           <span className="title-font font-medium text-2xl text-gray-900"> Rs.{product?.Product_Price}</span>
           <button
-           onClick={() => addToCart(product)}
+           onClick={handleCart}
           className="flex ml-auto text-white bg-red-500 hover:bg-red-600 px-6 py-2 rounded-lg transition duration-200"
           >
   Add to Cart

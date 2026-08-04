@@ -1,5 +1,15 @@
+import {
+  ShoppingCartIcon,
+  UserIcon,
+  ShoppingBagIcon,
+  StarIcon,
+  ClockIcon,
+  Cog6ToothIcon,
+  ArrowRightOnRectangleIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/24/outline";
+
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../store/authSlice";
 
@@ -8,7 +18,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const {data: user} = useSelector((state=>state.auth))
-  const items = useSelector((state)=>state.cart);
+  const {items} = useSelector((state)=>state.cart);
 
   const handleLogout = () => {
     const confirmLogout = window.confirm(
@@ -98,18 +108,77 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
         {user ? (
           <>
-            <Link
-              to="/profile"
-              className="font-medium hover:text-blue-600"
-            >
-              👤 {user.name}
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600"
-            >
-              Logout
-            </button>
+            <div className="relative group">
+  {/* Profile Button */}
+  <button className="flex items-center gap-2 font-medium hover:text-blue-600 transition-colors">
+    <UserIcon className="h-5 w-5" />
+    <span>{user.name}</span>
+    <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
+  </button>
+
+  {/* Dropdown */}
+  <div
+    className="absolute right-0 top-full pt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200
+               opacity-0 invisible translate-y-2
+               group-hover:opacity-100 group-hover:visible group-hover:translate-y-0
+               transition-all duration-200"
+  >
+    {/* Header */}
+    <div className="px-4 py-3 border-b">
+      <p className="font-semibold text-gray-800">{user.name}</p>
+      <p className="text-sm text-gray-500">{user.email}</p>
+    </div>
+
+    {/* Links */}
+    <Link
+      to="/profile"
+      className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 transition-colors"
+    >
+      <UserIcon className="h-5 w-5" />
+      My Profile
+    </Link>
+
+    <Link
+      to="/orders"
+      className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 transition-colors"
+    >
+      <ShoppingBagIcon className="h-5 w-5" />
+      My Orders
+    </Link>
+
+    <Link
+      to="/reviews"
+      className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 transition-colors"
+    >
+      <StarIcon className="h-5 w-5" />
+      My Reviews
+    </Link>
+
+    <Link
+      to="/history"
+      className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 transition-colors"
+    >
+      <ClockIcon className="h-5 w-5" />
+      Browsing History
+    </Link>
+
+    <Link
+      to="/settings"
+      className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 transition-colors"
+    >
+      <Cog6ToothIcon className="h-5 w-5" />
+      Settings
+    </Link>
+
+    <button
+      onClick={handleLogout}
+      className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 border-t transition-colors"
+    >
+      <ArrowRightOnRectangleIcon className="h-5 w-5" />
+      Logout
+    </button>
+  </div>
+</div>
            </>
         ) : (
           <>
