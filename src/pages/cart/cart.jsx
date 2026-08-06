@@ -1,14 +1,29 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   decreaseQuantity,
+  deleteProductFromCart,
   fetchCart,
   increaseQuantity,
 } from "../../store/cartSlice";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+const TrashIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-4 fill-current inline"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z" />
+    <path d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z" />
+  </svg>
+);
 
 const Cart = () => {
   const { items: products } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchCart());
@@ -88,14 +103,18 @@ const Cart = () => {
                         ).toLocaleString()}{" "}
                         Rs
                       </p>
+
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
+                      onClick={()=>
+                        dispatch(deleteProductFromCart(product.product._id))
+                      }
+                        
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
                         stroke="currentColor"
                         className="w-5 h-5 duration-150 cursor-pointer hover:text-red-500"
-                      >
+                      > <TrashIcon/>
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -131,7 +150,9 @@ const Cart = () => {
               <p className="text-sm text-gray-700">including VAT</p>
             </div>
           </div>
-          <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
+          <button 
+          onClick={ ()=> navigate("/checkout")}
+          className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
             Check out
           </button>
         </div>

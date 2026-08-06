@@ -52,6 +52,7 @@ export function fetchCart() {
   };
 }
 
+//async api call to Increase Quantity from cart tems
 export function increaseQuantity(productId) {
   return async function increaseQuantityThunk(dispatch) {
     dispatch(setStatus(STATUSES.LOADING));
@@ -68,6 +69,7 @@ export function increaseQuantity(productId) {
   };
 }
 
+//async api call to Decrease Quantity from cart tems
 export function decreaseQuantity(productId) {
   return async function decreaseQuantityThunk(dispatch) {
     dispatch(setStatus(STATUSES.LOADING));
@@ -75,6 +77,26 @@ export function decreaseQuantity(productId) {
     try {
       const response = await APIAuthenticated.patch(
         `/cart/${productId}/decrease`,
+      );
+
+      dispatch(setItem(response.data.data));
+      dispatch(setStatus(STATUSES.SUCCESS));
+    } catch (error) {
+      console.log(error);
+      dispatch(setStatus(STATUSES.ERROR));
+    }
+  };
+}
+
+
+//async api call to Delete item from cart tems
+export function deleteProductFromCart(productId) {
+  return async function deleteProductFromCartThunk(dispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+
+    try {
+      const response = await APIAuthenticated.delete(
+        `/cart/${productId}`,
       );
 
       dispatch(setItem(response.data.data));
