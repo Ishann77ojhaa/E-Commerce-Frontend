@@ -6,8 +6,8 @@ const API = axios.create({
     headers :{
         'Content-Type' : 'application/json',
         Accept : 'application/json'
-    }
-})
+    },
+});
 
 const APIAuthenticated  = axios.create({
     baseURL : "http://localhost:2000/api",
@@ -15,8 +15,20 @@ const APIAuthenticated  = axios.create({
     headers :{
         'Content-Type' : 'application/json',
         Accept : 'application/json',
-        'Authorization' : `${localStorage.getItem('token')}`
+        // 'Authorization' : `${localStorage.getItem('token')}`
     }
 })
+
+// Runs before EVERY request
+APIAuthenticated.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    config.headers.Authorization = token;
+  }
+
+  return config;
+});
+
 
 export {API, APIAuthenticated}

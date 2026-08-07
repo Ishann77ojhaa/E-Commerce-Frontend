@@ -259,12 +259,22 @@ const onSubmit = async (data) => {
                 </fieldset>
 
                 <div className="mt-8">
+                {
+                (paymentMethod === "Khalti") ? (
                   <button
                     type="submit"
                     className="w-full px-3.5 py-2 text-white text-sm font-semibold rounded-md cursor-pointer bg-blue-600 hover:bg-blue-700 border border-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                   >
-                    Pay Rs. {total.toFixed(2)}
+                    Pay Rs. {total.toFixed(2)} Via Khalti 
                   </button>
+                ) : (
+                 <button
+                    type="submit"
+                    className="w-full px-3.5 py-2 text-white text-sm font-semibold rounded-md cursor-pointer bg-blue-600 hover:bg-blue-700 border border-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                  >
+                    Total Rs. {total.toFixed(2)} Proceed
+                  </button>
+                )}
                 </div>
               </form>
               

@@ -25,12 +25,10 @@ const Login = () => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-
   const success = await dispatch(loginUser(userData));
 
   if (success) {
     const from = location.state?.from || "/";
-
     navigate(from, { replace: true });
   } else {
     alert("Invalid email or password");
