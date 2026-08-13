@@ -8,6 +8,8 @@ import Cart from "./pages/cart/cart";
 import ProductDetails from "./pages/productDetails/productDetails";
 import CheckOut from "./pages/checkOut/CheckOut";
 import KhaltiSuccess from "./pages/success/khaltiSuccess";
+import CODSuccess from "./pages/success/codSuccess";
+import Orders from "./pages/home/components/myOrders";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +47,13 @@ const router = createBrowserRouter([
         path: "/order-success/:orderId",
         element: <KhaltiSuccess/>
       },
+      {
+        path: "/order-success",
+        element: <CODSuccess/>
+      },{
+        path: "/orders",
+        element: <Orders/>
+      }
     ],
   },
 ]);
