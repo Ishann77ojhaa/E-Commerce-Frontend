@@ -1,19 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { STATUSES } from '../globals/components/misc/statuses'
-import {API} from '../http'
+import {API, APIAuthenticated} from '../http'
 
 
 export const authSlice = createSlice({
   name: 'auth',
+
   initialState : {
     data : null,
     status : STATUSES.IDLE,
-    token : ""
+    token : localStorage.getItem("token") || ""
   },
 
   reducers: {
     setUser(state,action){
-        state.data = action.payload
+        state.data = action.payload;
        },
        setStatus(state,action){
         state.status = action.payload
@@ -62,6 +63,24 @@ export function loginUser(data){
             dispatch(setStatus(STATUSES.ERROR))
 
             return false;
+        }
+    };
+}
+
+export function getMe(){
+    return async function getMeThunk(dispatch){
+        dispatch(setStatus(STATUSES.LOADING))
+        try{
+            const response = await APIAuthenticated.get("/auth/me")
+            dispatch(setUser(response.data.data))
+            
+            dispatch(setStatus(STATUSES.SUCCESS))
+        
+
+        } catch(error){
+            console.log(error.response?.data);
+            localStorage.removeItem("token");
+            dispatch(logout());
         }
     };
 }

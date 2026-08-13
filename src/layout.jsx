@@ -1,19 +1,22 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./globals/components/navbar/Navbar";
 import Footer from "./globals/components/footer/footer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchCart } from "./store/cartSlice";
+import { clearCart, fetchCart } from "./store/cartSlice";
+import { getMe } from "./store/authSlice";
 
 export default function Layout() {
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
 
-  useEffect(()=>{
-    const token = localStorage.getItem("token");
-
+  useEffect(()=>{ 
     if(token){
-      dispatch(fetchCart());
-    }}, [dispatch]);
+      dispatch(getMe())
+      dispatch(fetchCart());  
+    }else{
+      dispatch(clearCart());
+    }}, [token, dispatch]);
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />

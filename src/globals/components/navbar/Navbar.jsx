@@ -17,7 +17,8 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const {data: user} = useSelector((state=>state.auth))
+  const user = useSelector((state=>state.auth.data))
+  console.log("Navbar user=", user)
   const {items} = useSelector((state)=>state.cart);
 
   const handleLogout = () => {

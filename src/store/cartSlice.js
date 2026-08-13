@@ -15,10 +15,13 @@ export const cartSlice = createSlice({
     setStatus(state, action) {
       state.status = action.payload;
     },
+    clearCart(state) {
+    state.items = [];
+  },
   },
 });
 
-export const { setItem, setStatus } = cartSlice.actions;
+export const { setItem, setStatus, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;
 
 //async api call to add to cart
