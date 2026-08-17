@@ -10,6 +10,7 @@ import CheckOut from "./pages/checkOut/CheckOut";
 import KhaltiSuccess from "./pages/success/khaltiSuccess";
 import CODSuccess from "./pages/success/codSuccess";
 import Orders from "./pages/home/components/myOrders";
+import OrderDetails from "./pages/orderDetails/OrderDetails";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,9 @@ const router = createBrowserRouter([
       },{
         path: "/orders",
         element: <Orders/>
+      },{
+        path: "/orders/:id",
+        element: <OrderDetails/>
       }
     ],
   },
