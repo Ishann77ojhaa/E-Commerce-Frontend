@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,23 +10,33 @@ import {
   XCircleIcon,
 } from "@heroicons/react/24/outline";
 
-import { getOrderById } from "../../../src/store/orderSlice";
+import { cancelOrder, getOrderById, updateOrder } from "../../../src/store/orderSlice";
 import { STATUSES } from "../../globals/components/misc/statuses";
 import Loader from "../../globals/components/loader/loader";
 
 export default function OrderDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
-
   const { selectedOrder, status: loadingStatus } = useSelector(
-    (state) => state.order
-  );
+  (state) => state.order
+);
+
+const order = selectedOrder;
+
+const [isEditing, setIsEditing] = useState(false);
+const [shippingAddress, setShippingAddress] = useState("");
+const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     if (id) {
       dispatch(getOrderById(id));
     }
   }, [id, dispatch]);
+  useEffect(() => {
+  if (selectedOrder) {
+    setShippingAddress(selectedOrder.Shipping_Address || "");
+  }
+}, [selectedOrder]);
 
   if (loadingStatus === STATUSES.LOADING) {
     return (
@@ -59,8 +69,6 @@ export default function OrderDetails() {
     );
   }
 
-  const order = selectedOrder;
-
   const isPaid =
     order.Payment_Details?.status === "Paid";
 
@@ -70,10 +78,57 @@ export default function OrderDetails() {
   const status = order.Order_Status;
 
   const subtotal = order.Items?.reduce(
-    (total, item) =>
-      total + (item.price || 0) * (item.quantity || 0),
-    0
+  (total, item) =>
+    total +
+    (item.product?.Product_Price || 0) * (item.quantity || 0),
+  0
+);
+
+const handleCancelOrder = async () => {
+  const confirmed = window.confirm(
+    "Are you sure you want to cancel this order?"
   );
+  if (!confirmed) return;
+  const success = await dispatch(cancelOrder(order._id));
+  if (success) {
+    alert("Order cancelled successfully.");
+  } else {
+    alert("Failed to cancel order.");
+  }
+};
+
+const handleUpdateOrder = async () => {
+    if (!shippingAddress.trim()) {
+        alert("Shipping address cannot be empty.");
+        return;
+    }
+
+    setIsUpdating(true);
+
+    try {
+        await dispatch(
+            updateOrder(
+                order._id,
+                shippingAddress
+            )
+        );
+
+        setIsEditing(false);
+
+        alert("Shipping address updated successfully.");
+
+        // Get fresh order data
+        dispatch(getOrderById(order._id));
+
+    } catch (error) {
+        alert(
+            error.response?.data?.message ||
+            "Failed to update shipping address."
+        );
+    } finally {
+        setIsUpdating(false);
+    }
+};
 
   return (
     <main className="px-4 md:px-8 py-10">
@@ -209,36 +264,96 @@ export default function OrderDetails() {
             </section>
 
             {/* Shipping */}
-            <section className="bg-white border border-slate-200 rounded-xl p-6">
+            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
 
-              <h2 className="text-lg font-semibold text-slate-900">
-                Shipping Information
-              </h2>
+    <div className="px-6 py-5 border-b border-slate-200 flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-slate-900">
+            Shipping Information
+        </h2>
 
-              <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-6">
+        {order.Order_Status === "Pending" && !isEditing && (
+            <button
+                onClick={() => setIsEditing(true)}
+                className="px-4 py-2 text-sm font-semibold text-blue-600
+                           border border-blue-200 rounded-lg
+                           hover:bg-blue-50 transition"
+            >
+                Edit Order
+            </button>
+        )}
+    </div>
 
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-slate-400">
-                    Shipping Address
-                  </p>
+    <div className="p-6">
 
-                  <p className="mt-2 text-sm text-slate-700 leading-6">
+        <div>
+            <label className="text-xs uppercase tracking-wide text-slate-500">
+                Shipping Address
+            </label>
+
+            {isEditing ? (
+                <textarea
+                    value={shippingAddress}
+                    onChange={(e) =>
+                        setShippingAddress(e.target.value)
+                    }
+                    rows={4}
+                    className="mt-2 w-full border border-slate-300 rounded-lg
+                               px-4 py-3 text-slate-900
+                               focus:outline-none focus:ring-2
+                               focus:ring-blue-500"
+                    placeholder="Enter your shipping address"
+                />
+            ) : (
+                <p className="mt-2 text-slate-900 font-medium">
                     {order.Shipping_Address}
-                  </p>
-                </div>
+                </p>
+            )}
+        </div>
 
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-slate-400">
-                    Phone Number
-                  </p>
+        <div className="mt-6">
+            <p className="text-xs uppercase tracking-wide text-slate-500">
+                Phone Number
+            </p>
 
-                  <p className="mt-2 text-sm text-slate-700">
-                    {order.Phone_Number}
-                  </p>
-                </div>
+            <p className="mt-2 text-slate-900 font-medium">
+                {order.Phone_Number}
+            </p>
+        </div>
 
-              </div>
-            </section>
+        {isEditing && (
+            <div className="mt-6 flex justify-end gap-3">
+
+                <button
+                    onClick={() => {
+                        setIsEditing(false);
+                        setShippingAddress(
+                            order.Shipping_Address
+                        );
+                    }}
+                    disabled={isUpdating}
+                    className="px-5 py-2.5 rounded-lg border
+                               border-slate-300 text-slate-700
+                               font-medium hover:bg-slate-50"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    onClick={handleUpdateOrder}
+                    disabled={isUpdating}
+                    className="px-5 py-2.5 rounded-lg
+                               bg-blue-600 text-white
+                               font-semibold hover:bg-blue-700
+                               disabled:opacity-50"
+                >
+                    {isUpdating ? "Updating..." : "Save Changes"}
+                </button>
+
+            </div>
+        )}
+
+    </div>
+</div>
 
           </div>
 
@@ -369,6 +484,26 @@ export default function OrderDetails() {
                 )}
 
               </div>
+
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200 pt-6">
+
+  <Link
+    to="/orders"
+    className="w-full sm:w-auto px-5 py-2.5 rounded-lg border border-slate-300 text-slate-700 font-semibold hover:bg-slate-50 transition-colors text-center"
+  >
+    ← Back to My Orders
+  </Link>
+
+  {order.Order_Status === "Pending" && (
+    <button
+      onClick={handleCancelOrder}
+      className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors"
+    >
+      Cancel Order
+    </button>
+  )}
+
+</div>
 
             </section>
 

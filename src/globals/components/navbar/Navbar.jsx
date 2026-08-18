@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ShoppingCartIcon,
   UserIcon,
@@ -14,7 +14,8 @@ import {
 
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../../store/authSlice";
+import { fetchProfile, logout } from "../../../store/authSlice";
+import { fetchCart } from "../../../store/cartSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();

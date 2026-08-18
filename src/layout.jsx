@@ -4,7 +4,7 @@ import Footer from "./globals/components/footer/footer";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { clearCart, fetchCart } from "./store/cartSlice";
-import { getMe } from "./store/authSlice";
+import { fetchProfile, getMe } from "./store/authSlice";
 
 export default function Layout() {
   const dispatch = useDispatch();
@@ -13,6 +13,7 @@ export default function Layout() {
   useEffect(()=>{ 
     if(token){
       dispatch(getMe())
+      dispatch(fetchProfile());
       dispatch(fetchCart());  
     }else{
       dispatch(clearCart());

@@ -83,4 +83,18 @@ export function getMe(){
             dispatch(logout());
         }
     };
+};
+
+export function fetchProfile(){
+    return async function  fetchProfileThunk(dispatch){
+        dispatch(setStatus(STATUSES.LOADING))
+        try{
+            const response = await APIAuthenticated.get("profile/")
+            dispatch(setUser(response.data.data))
+            dispatch(setStatus(STATUSES.SUCCESS))
+
+        } catch(error){
+            dispatch(setStatus(STATUSES.ERROR))
+        }
+    };
 }

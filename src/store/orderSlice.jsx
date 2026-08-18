@@ -7,12 +7,17 @@ import { APIAuthenticated } from "../http";
 
   initialState: {
     orders: [],
+    selectedOrder: null,
     status: STATUSES.IDLE,
   },
 
   reducers: {
     setOrders(state, action) {
       state.orders = action.payload;
+    },
+
+    setOrder: (state, action) => {
+    state.order = action.payload;
     },
 
     setStatus(state, action) {
@@ -31,6 +36,7 @@ import { APIAuthenticated } from "../http";
 
 export const {
   setOrders,
+  setOrder,
   setStatus,
   clearOrders,
   setSelectedOrder,
@@ -64,6 +70,54 @@ export function getOrderById(id) {
 
     try {
       const response = await APIAuthenticated.get(`/order/${id}`);
+
+      dispatch(setSelectedOrder(response.data.data));
+      dispatch(setStatus(STATUSES.SUCCESS));
+
+      return true;
+    } catch (error) {
+      console.log(error.response?.data || error);
+
+      dispatch(setStatus(STATUSES.ERROR));
+
+      return false;
+    }
+  };
+}
+
+
+//Update Order
+export const updateOrder = (orderId, shippingAddress) => async (dispatch) => {
+    try {
+        const response = await APIAuthenticated.patch(
+            `/order/${orderId}`,
+            {
+                shipping_address: shippingAddress
+            }
+        );
+
+        dispatch(setSelectedOrder(response.data.data));
+
+        return response.data;
+    } catch (error) {
+        console.log(
+            "UPDATE ORDER ERROR:",
+            error.response?.data || error.message
+        );
+
+        throw error;
+    }
+};
+
+//Cancel Order
+export function cancelOrder(orderId) {
+  return async function cancelOrderThunk(dispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+
+    try {
+      const response = await APIAuthenticated.patch(
+        `/order/cancel/${orderId}`
+      );
 
       dispatch(setSelectedOrder(response.data.data));
       dispatch(setStatus(STATUSES.SUCCESS));
