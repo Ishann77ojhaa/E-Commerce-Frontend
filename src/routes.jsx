@@ -11,8 +11,6 @@ import KhaltiSuccess from "./pages/success/khaltiSuccess";
 import CODSuccess from "./pages/success/codSuccess";
 import Orders from "./pages/home/components/myOrders";
 import OrderDetails from "./pages/orderDetails/OrderDetails";
-import Dashboard from "./pages/admin/dashboard/Dashboard";
-import ProtectedRoute from "./pages/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -59,9 +57,6 @@ const router = createBrowserRouter([
       },{
         path: "/orders/:id",
         element: <OrderDetails/>
-      },{
-        path: "/admin/dashboard",
-        element: <ProtectedRoute> <Dashboard/> </ProtectedRoute>
       }
     ],
   },

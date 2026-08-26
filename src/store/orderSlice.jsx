@@ -15,11 +15,6 @@ import { APIAuthenticated } from "../http";
     setOrders(state, action) {
       state.orders = action.payload;
     },
-
-    setOrder: (state, action) => {
-    state.order = action.payload;
-    },
-
     setStatus(state, action) {
       state.status = action.payload;
     },
@@ -36,7 +31,6 @@ import { APIAuthenticated } from "../http";
 
 export const {
   setOrders,
-  setOrder,
   setStatus,
   clearOrders,
   setSelectedOrder,

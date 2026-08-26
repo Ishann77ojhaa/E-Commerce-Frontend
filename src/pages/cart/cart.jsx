@@ -22,6 +22,7 @@ const TrashIcon = () => (
 
 const Cart = () => {
   const { items: products } = useSelector((state) => state.cart);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -29,133 +30,228 @@ const Cart = () => {
     dispatch(fetchCart());
   }, [dispatch]);
 
-  // Checkout total
-  const subtotal = products.reduce(
-    (total, item) => total + item.product.Product_Price * item.quantity,
-    0,
+  // Remove invalid/stale cart items
+  const validProducts = products.filter(
+    (item) => item?.product
   );
 
-  // Checkout shipping price
+  // Total items
+  const totalItemsInCart = validProducts.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
+  // Subtotal
+  const subtotal = validProducts.reduce(
+    (total, item) =>
+      total + item.product.Product_Price * item.quantity,
+    0
+  );
+
+  // Shipping
   const shipping = subtotal > 1000 ? 0 : 100;
 
-  //checkout total price
+  // Total
   const total = subtotal + shipping;
-
-  const totalItemsInCart = products.reduce(
-    (total, item) => item.quantity + total,
-    0,
-  );
 
   return (
     <div className="min-h-screen pt-20 bg-gray-100">
-      <h1 className="mb-10 text-2xl font-bold text-center">Cart Items</h1>
-      <div className="justify-center max-w-5xl px-6 mx-auto md:flex md:space-x-6 xl:px-0">
-        <div className="rounded-lg md:w-2/3">
-          {products.map((product) => {
-            return (
-              <div
-                key={product.product._id}
-                className="justify-between p-6 mb-6 bg-white rounded-lg shadow-md sm:flex sm:justify-start"
-              >
-                <img
-                  src={product.product.productImage}
-                  alt={product.product.Product_Name}
-                  className="w-full rounded-lg sm:w-40"
-                />
-                <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-                  <div className="mt-5 sm:mt-0">
-                    <h2 className="text-lg font-bold text-gray-900">
-                      {product.product.Product_Name}
-                    </h2>
-                  </div>
-                  <div className="flex justify-between mt-4 sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                    <div className="flex items-center border-gray-100">
-                      <span
-                        onClick={() =>
-                          dispatch(decreaseQuantity(product.product._id))
-                        }
-                        className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"
-                      >
-                        {" "}
-                        -{" "}
-                      </span>
-                      <input
-                        className="w-8 h-8 text-xs text-center bg-white border outline-none"
-                        type="number"
-                        value={product.quantity}
-                        readOnly
-                        min="1"
-                      />
-                      <span
-                        onClick={() =>
-                          dispatch(increaseQuantity(product.product._id))
-                        }
-                        className="px-3 py-1 duration-100 bg-gray-100 rounded-r cursor-pointer hover:bg-blue-500 hover:text-blue-50"
-                      >
-                        {" "}
-                        +{" "}
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                      <p className="text-sm">
-                        {(
-                          product.product.Product_Price * product.quantity
-                        ).toLocaleString()}{" "}
-                        Rs
-                      </p>
+      <h1 className="mb-10 text-2xl font-bold text-center">
+        Cart Items
+      </h1>
 
-                      <svg
-                      onClick={()=>
-                        dispatch(deleteProductFromCart(product.product._id))
-                      }
-                        
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-5 h-5 duration-150 cursor-pointer hover:text-red-500"
-                      > <TrashIcon/>
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18L18 6M6 6l12 12"
+      <div className="justify-center max-w-5xl px-6 mx-auto md:flex md:space-x-6 xl:px-0">
+
+        {/* ================= CART PRODUCTS ================= */}
+        <div className="rounded-lg md:w-2/3">
+
+          {validProducts.length > 0 ? (
+            validProducts.map((item) => {
+              const product = item.product;
+
+              return (
+                <div
+                  key={product._id}
+                  className="justify-between p-6 mb-6 bg-white rounded-lg shadow-md sm:flex sm:justify-start"
+                >
+
+                  {/* Product Image */}
+                  <img
+                    src={`http://${product.Product_Image}`}
+                    alt={product.Product_Name}
+                    className="w-full h-40 object-contain rounded-lg sm:w-40 bg-gray-50"
+                  />
+
+                  <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
+
+                    {/* Product Name */}
+                    <div className="mt-5 sm:mt-0">
+                      <h2 className="text-lg font-bold text-gray-900">
+                        {product.Product_Name}
+                      </h2>
+
+                      <p className="mt-2 text-sm text-gray-500">
+                        Rs. {product.Product_Price}
+                      </p>
+                    </div>
+
+                    {/* Quantity + Price + Delete */}
+                    <div className="flex justify-between mt-4 sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
+
+                      {/* Quantity */}
+                      <div className="flex items-center border-gray-100">
+
+                        <button
+                          onClick={() =>
+                            dispatch(
+                              decreaseQuantity(product._id)
+                            )
+                          }
+                          className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"
+                        >
+                          -
+                        </button>
+
+                        <input
+                          className="w-8 h-8 text-xs text-center bg-white border outline-none"
+                          type="number"
+                          value={item.quantity}
+                          readOnly
+                          min="1"
                         />
-                      </svg>
+
+                        <button
+                          onClick={() =>
+                            dispatch(
+                              increaseQuantity(product._id)
+                            )
+                          }
+                          className="px-3 py-1 duration-100 bg-gray-100 rounded-r cursor-pointer hover:bg-blue-500 hover:text-blue-50"
+                        >
+                          +
+                        </button>
+
+                      </div>
+
+                      {/* Price + Delete */}
+                      <div className="flex items-center space-x-4">
+
+                        <p className="text-sm">
+                          {(
+                            product.Product_Price *
+                            item.quantity
+                          ).toLocaleString()}{" "}
+                          Rs
+                        </p>
+
+                        <button
+                          onClick={() =>
+                            dispatch(
+                              deleteProductFromCart(product._id)
+                            )
+                          }
+                          className="text-gray-500 duration-150 cursor-pointer hover:text-red-500"
+                          title="Remove product"
+                        >
+                          <TrashIcon />
+                        </button>
+
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div className="p-10 text-center bg-white rounded-lg shadow-md">
+              <h2 className="text-xl font-semibold text-gray-700">
+                Your cart is empty
+              </h2>
+
+              <p className="mt-2 text-gray-500">
+                Add some products to your cart.
+              </p>
+
+              <button
+                onClick={() => navigate("/")}
+                className="px-6 py-2 mt-5 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+              >
+                Continue Shopping
+              </button>
+            </div>
+          )}
+
         </div>
 
+        {/* ================= ORDER SUMMARY ================= */}
         <div className="h-full p-6 mt-6 bg-white border rounded-lg shadow-md md:mt-0 md:w-1/3">
+
           <div className="flex justify-between mb-2">
-            <p className="text-gray-700">Total-Items</p>
-            <p className="text-gray-700">{totalItemsInCart}</p>
+            <p className="text-gray-700">
+              Total Items
+            </p>
+
+            <p className="text-gray-700">
+              {totalItemsInCart}
+            </p>
           </div>
+
           <div className="flex justify-between mb-2">
-            <p className="text-gray-700">Subtotal</p>
-            <p className="text-gray-700">{subtotal}</p>
+            <p className="text-gray-700">
+              Subtotal
+            </p>
+
+            <p className="text-gray-700">
+              Rs. {subtotal.toLocaleString()}
+            </p>
           </div>
+
           <div className="flex justify-between">
-            <p className="text-gray-700">Shipping</p>
-            <p className="text-gray-700">{shipping}</p>
+            <p className="text-gray-700">
+              Shipping
+            </p>
+
+            <p className="text-gray-700">
+              {shipping === 0
+                ? "FREE"
+                : `Rs. ${shipping}`}
+            </p>
           </div>
+
           <hr className="my-4" />
+
           <div className="flex justify-between">
-            <p className="text-lg font-bold">Total</p>
-            <div className="">
-              <p className="mb-1 text-lg font-bold"> Rs. {total} only</p>
-              <p className="text-sm text-gray-700">including VAT</p>
+
+            <p className="text-lg font-bold">
+              Total
+            </p>
+
+            <div>
+              <p className="mb-1 text-lg font-bold">
+                Rs. {total.toLocaleString()}
+              </p>
+
+              <p className="text-sm text-gray-700">
+                including VAT
+              </p>
             </div>
+
           </div>
-          <button 
-          onClick={ ()=> navigate("/checkout")}
-          className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
+
+          <button
+            onClick={() => navigate("/checkout")}
+            disabled={validProducts.length === 0}
+            className={`mt-6 w-full rounded-md py-2 font-medium ${
+              validProducts.length > 0
+                ? "bg-blue-500 text-blue-50 hover:bg-blue-600"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
+          >
             Check out
           </button>
+
         </div>
+
       </div>
     </div>
   );

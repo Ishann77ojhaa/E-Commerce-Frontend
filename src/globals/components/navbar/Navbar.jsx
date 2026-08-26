@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ShoppingCartIcon,
   UserIcon,
@@ -156,7 +156,7 @@ const Navbar = () => {
                   </span>
 
                   <span className="max-w-[120px] truncate">
-                    {user.name}
+                    {user.user_Name}
                   </span>
 
                   <ChevronDownIcon

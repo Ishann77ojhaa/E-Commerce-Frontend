@@ -61,7 +61,7 @@ if (status === "failed") {
     <div className="lg:w-4/5 mx-auto flex flex-wrap">
       <img alt= {product?.Product_Name}
       className="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200" 
-      src={product?.Product_Image || "/no-image.png"}/>
+      src={`http://${product?.Product_Image}`}/>
 
       <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
         <h2 className="text-sm font-medium tracking-widest uppercase text-red-500">

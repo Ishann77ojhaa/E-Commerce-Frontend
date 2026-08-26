@@ -168,8 +168,8 @@ const Footer = () => {
               </li>
 
               <li>
-                <Link to="/faq" className={linkClass}>
-                  FAQ
+                <Link to="/dashboard" className={linkClass}>
+                  Dashboard
                 </Link>
               </li>
             </ul>
