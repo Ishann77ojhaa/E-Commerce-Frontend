@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../../store/authSlice";
 import { STATUSES } from "../../../globals/components/misc/statuses";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import Loader from "../../../globals/components/loader/loader";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -75,6 +76,15 @@ const Login = () => {
       alert("Invalid email or password");
     }
   };
+
+  // Loading
+  if (STATUSES.LOADING) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Loader message="Loading..."/>
+      </div>
+    );
+  }
 
 
   return (
@@ -208,8 +218,8 @@ const Login = () => {
           Don't have an account?{" "}
           <button
             type="button"
-            className="font-medium text-red-600 hover:text-red-500"
-            onClick={() => navigate("/signup")}
+            className="font-medium text-red-600 hover:text-red-500 hover:underline"
+            onClick={() => navigate("/register")}
           >
             Sign up
           </button>

@@ -12,6 +12,9 @@ import CODSuccess from "./pages/success/codSuccess";
 import Orders from "./pages/home/components/myOrders";
 import OrderDetails from "./pages/orderDetails/OrderDetails";
 import ForgotPassword from "./pages/auth/forgotPass/ForgotPassword";
+import VerifyOTPPage from "./pages/auth/forgotPass/VerifyOTP";
+import ResetPass from "./pages/auth/forgotPass/ResetPass";
+
 
 const router = createBrowserRouter([
   {
@@ -61,6 +64,12 @@ const router = createBrowserRouter([
       },{
         path: "/forgotpassword",
         element: <ForgotPassword/>
+      },{
+        path: "/verify-otp",
+        element: <VerifyOTPPage/>
+      },{
+        path: "/reset-password",
+        element: <ResetPass/>
       }
     ],
   },

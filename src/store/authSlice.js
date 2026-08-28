@@ -9,7 +9,8 @@ export const authSlice = createSlice({
   initialState : {
     data : null,
     status : STATUSES.IDLE,
-    token : localStorage.getItem("token") || ""
+    token : localStorage.getItem("token") || "",
+    email : ""
   },
 
   reducers: {
@@ -26,11 +27,14 @@ export const authSlice = createSlice({
         state.data = null;
         state.token = "";
         localStorage.removeItem("token");
+    },
+    setEmail(state,action){
+       state.email = action.payload 
     }
     },
 })
 
-export const { setUser,setStatus, setToken, logout } = authSlice.actions
+export const { setUser,setStatus, setToken, logout, setEmail } = authSlice.actions
 export default authSlice.reducer
 
 export function registerUser(data){
@@ -98,3 +102,74 @@ export function fetchProfile(){
         }
     };
 }
+
+export function ForgotPass(data){
+    return async function ForgotPassThunk(dispatch){
+        dispatch(setStatus(STATUSES.LOADING))
+        try{
+            const response = await API.post("/auth/forgotpassword/",data)
+            dispatch(setEmail(data.user_email))
+            dispatch(setStatus(STATUSES.SUCCESS))
+            return true;
+
+        } catch(error){
+            console.log(error)
+            dispatch(setStatus(STATUSES.ERROR))
+
+            return false;
+        }
+    };
+}
+
+export function VerifyOTP(data) {
+    return async function VerifyOTPThunk(dispatch) {
+        dispatch(setStatus(STATUSES.LOADING));
+
+        try {
+            const response = await API.post(
+                "/auth/verifyotp",
+                data
+            );
+
+            dispatch(setStatus(STATUSES.SUCCESS));
+
+            return true;
+
+        } catch (error) {
+            console.log(error.response?.data || error);
+
+            dispatch(setStatus(STATUSES.ERROR));
+
+            return false;
+        }
+    };
+}
+
+export function ResetPassword(data) {
+
+    return async function ResetPasswordThunk(dispatch) {
+
+        dispatch(setStatus(STATUSES.LOADING));
+
+        try {
+
+            const response = await API.post(
+                "/auth/resetpassword",
+                data
+            );
+
+            dispatch(setStatus(STATUSES.SUCCESS));
+
+            return true;
+
+        } catch (error) {
+
+            console.log(error.response?.data || error);
+
+            dispatch(setStatus(STATUSES.ERROR));
+
+            return false;
+        }
+    };
+}
+
