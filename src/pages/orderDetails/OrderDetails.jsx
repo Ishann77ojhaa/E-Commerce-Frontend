@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { QRCodeCanvas } from "qrcode.react";
 
 import {
   ArrowLeftIcon,
@@ -214,7 +215,7 @@ const handleUpdateOrder = async () => {
                       {/* Image */}
                       <div className="w-24 h-24 shrink-0 bg-slate-100 rounded-lg p-2">
                         <img
-                          src={product?.Product_Image}
+                          src={`http://${product?.Product_Image}`}
                           alt={
                             product?.Product_Name ||
                             "Product"
@@ -430,6 +431,24 @@ const handleUpdateOrder = async () => {
               </div>
             </section>
 
+            {/* QR code */}
+  <div className="bg-white border border-slate-200 rounded-xl p-6 text-center">
+  <h2 className="text-lg font-semibold text-slate-900">
+    Order QR Code
+  </h2>
+
+  <p className="mt-2 text-sm text-slate-500">
+    Scan this QR code to open this order.
+  </p>
+
+  <div className="mt-5 flex justify-center">
+    <QRCodeCanvas
+      value={`${window.location.origin}/orders/${order._id}`}
+      size={180}
+    />
+  </div>
+  </div>
+
             {/* Status Timeline */}
             <section className="bg-white border border-slate-200 rounded-xl p-6">
 
@@ -485,7 +504,7 @@ const handleUpdateOrder = async () => {
 
               </div>
 
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200 pt-6">
+<div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200 pt-6">
 
   <Link
     to="/orders"

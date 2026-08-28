@@ -11,6 +11,7 @@ import KhaltiSuccess from "./pages/success/khaltiSuccess";
 import CODSuccess from "./pages/success/codSuccess";
 import Orders from "./pages/home/components/myOrders";
 import OrderDetails from "./pages/orderDetails/OrderDetails";
+import ForgotPassword from "./pages/auth/forgotPass/ForgotPassword";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,9 @@ const router = createBrowserRouter([
       },{
         path: "/orders/:id",
         element: <OrderDetails/>
+      },{
+        path: "/forgotpassword",
+        element: <ForgotPassword/>
       }
     ],
   },
