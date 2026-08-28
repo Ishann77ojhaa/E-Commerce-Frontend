@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../../store/productSlice";
 import { Link, useNavigate } from "react-router-dom";
+import Loader from "../../../globals/components/loader/loader";
 
 export default function Product() {
   const navigate = useNavigate()
@@ -12,9 +13,7 @@ export default function Product() {
     dispatch(fetchProducts());
   }, []);
 
-  if (status == "loading") {
-    return <h1>Loading....</h1>;
-  }
+<Loader message="Please Wait"/>
 
   if (status == "error") {
     return <h1> Error!! Something went Wrong </h1>;

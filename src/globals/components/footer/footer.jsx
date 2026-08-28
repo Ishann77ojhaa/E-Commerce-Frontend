@@ -175,6 +175,17 @@ const Footer = () => {
             </ul>
           </div>
 
+          <div>
+            <h3 className={headingClass}>For Developers</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link to="/IshShop-Dosc" className={linkClass}>
+                  Documentation
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           {/* Account */}
           <div>
             <h3 className={headingClass}>Account</h3>
