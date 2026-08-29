@@ -26,6 +26,17 @@ import { APIAuthenticated } from "../http";
     setSelectedOrder(state, action) {
   state.selectedOrder = action.payload;
 },
+updateOrderStatus(state, action) {
+  const { orderId, status } = action.payload;
+
+  const order = state.orders.find(
+    (order) => order._id === orderId
+  );
+
+  if (order) {
+    order.Order_Status = status;
+  }
+},
   },
 });
 
@@ -34,6 +45,7 @@ export const {
   setStatus,
   clearOrders,
   setSelectedOrder,
+  updateOrderStatus
 } = orderSlice.actions;
 
 export default orderSlice.reducer;

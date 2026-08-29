@@ -10,9 +10,10 @@ import {
   EyeIcon
 } from "@heroicons/react/24/outline";
 
-import { getMyOrders } from "../../../store/orderSlice";
+import { getMyOrders, updateOrderStatus } from "../../../store/orderSlice";
 import { STATUSES } from "../../../globals/components/misc/statuses";
 import Loader from "../../../globals/components/loader/loader";
+import { socket } from "../../../App";
 
 export default function MyOrders() {
   const dispatch = useDispatch();
@@ -28,8 +29,18 @@ export default function MyOrders() {
     dispatch(getMyOrders());
   }, [dispatch]);
 
+  useEffect(() => {
+  const handleStatusUpdate = (data) => {
+    console.log("Status updated:", data);
+    dispatch(updateOrderStatus(data));
+  };
+  socket.on("statusUpdated", handleStatusUpdate);
+  return () => {
+    socket.off("statusUpdated", handleStatusUpdate);
+  };
+}, [dispatch]);
   // --------------------------------------------------
-  // Statuses actually used by your backend
+  // Statuses actually used by our backend
   // --------------------------------------------------
 
   const statuses = useMemo(() => {
