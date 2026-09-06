@@ -8,7 +8,7 @@ import Cart from "./pages/cart/cart";
 import CheckOut from "./pages/checkOut/CheckOut";
 import KhaltiSuccess from "./pages/success/khaltiSuccess";
 import CODSuccess from "./pages/success/codSuccess";
-import Orders from "./pages/home/components/myOrders";
+import MyOrders from "./pages/home/components/MyOrders";
 import OrderDetails from "./pages/orderDetails/OrderDetails";
 import ForgotPassword from "./pages/auth/forgotPass/ForgotPassword";
 import VerifyOTPPage from "./pages/auth/forgotPass/VerifyOTP";
@@ -65,7 +65,7 @@ const router = createBrowserRouter([
         element: <CODSuccess/>
       },{
         path: "/orders",
-        element: <Orders/>
+        element: <MyOrders/>
       },{
         path: "/orders/:id",
         element: <OrderDetails/>
