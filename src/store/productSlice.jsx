@@ -35,17 +35,6 @@ export const productSlice = createSlice({
             state.status = STATUSES.ERROR
         })
     }
-    
-    // add: (state, action) => {
-    //   state.push(action.payload)
-    // },
-    // remove: (state, action) => {
-    //   return state.filter((item)=>item._id !== action.payload);
-    // },
-    // incrementByAmount: (state, action) => {
-    //   state.value += action.payload
-    // },
-//   },
 })
 
 export const { setProducts,setStatus, setselectedProduct } = productSlice.actions

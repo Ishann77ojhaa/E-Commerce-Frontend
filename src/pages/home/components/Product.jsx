@@ -9,6 +9,9 @@ export default function Product() {
     (state) => state.product
   );
 
+console.log("PRODUCTS:", products);
+console.log("STATUS:", status);
+
   if (status === "loading") {
     return <Loader message="Please Wait" />;
   }
