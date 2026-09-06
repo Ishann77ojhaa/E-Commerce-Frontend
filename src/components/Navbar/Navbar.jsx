@@ -1,5 +1,5 @@
 import Logo from "./Logo";
-import SearchDropDown from "./SearchDropDown";
+import SearchDropDown from "./SearchDropdown";
 import AccountDropdown from "./AccountDropdown";
 import CartDropdown from "./CartDropdown";
 import MobileMenu from "./MobileMenu";
