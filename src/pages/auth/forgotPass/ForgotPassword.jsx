@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ForgotPass } from "../../../store/authSlice";
-import { STATUSES } from "../../../globals/components/misc/statuses";
+
 
 
 const ForgotPassword = () => {
@@ -24,7 +24,7 @@ const ForgotPassword = () => {
             return;
         }
 
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     setError("Enter a valid email address");
     return;
 }
@@ -44,13 +44,13 @@ const ForgotPassword = () => {
     };
 
     // Loading
-  if (STATUSES.LOADING) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader message="Loading..."/>
-      </div>
-    );
-  }
+//   if (STATUSES.LOADING) {
+//     return (
+//       <div className="min-h-[60vh] flex items-center justify-center">
+//         <Loader message="Loading..."/>
+//       </div>
+//     );
+//   }
     return (
         <main className="w-full min-h-screen flex flex-col items-center justify-center px-4">
             <div className="max-w-sm w-full text-gray-600 space-y-5">

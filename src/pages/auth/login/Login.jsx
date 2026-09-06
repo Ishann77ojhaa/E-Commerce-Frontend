@@ -78,7 +78,7 @@ const Login = () => {
   };
 
   // Loading
-  if (STATUSES.LOADING) {
+  if (status === STATUSES.LOADING) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <Loader message="Loading..."/>

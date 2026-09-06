@@ -107,7 +107,7 @@ export function ForgotPass(data){
     return async function ForgotPassThunk(dispatch){
         dispatch(setStatus(STATUSES.LOADING))
         try{
-            const response = await API.post("/auth/forgotpassword/",data)
+            const response = await API.post("/auth/forgotpassword",data)
             dispatch(setEmail(data.user_email))
             dispatch(setStatus(STATUSES.SUCCESS))
             return true;

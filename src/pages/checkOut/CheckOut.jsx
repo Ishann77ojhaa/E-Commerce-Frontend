@@ -419,7 +419,7 @@ export default function CheckOut() {
                               <div className="w-24 h-24 shrink-0 bg-gray-50 p-2 rounded-md dark:bg-neutral-700">
 
                                 <img
-                                  src={`http://${item.product.Product_Image}`}
+                                  src={`https://iecomifybackend.onrender.com${item.product.Product_Image}`}
                                   className="w-full h-full object-contain"
                                   alt={
                                     item.product.Product_Name
