@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
+import Loader from "../../../globals/components/loader/loader";
 
 
 const LatestArrivals = () => {
@@ -26,7 +27,7 @@ const LatestArrivals = () => {
         </div>
 
         {status === "loading" && (
-          <p className="text-center">Loading products...</p>
+          <Loader message="Loading products..."/>
         )}
 
         {status === "success" && (
