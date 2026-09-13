@@ -2,14 +2,14 @@ import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { VerifyOTP } from "../../../store/authSlice";
-import { STATUSES } from "../../../globals/components/misc/statuses";
 import Loader from "../../../globals/components/loader/loader";
+import { STATUSES } from "../../../globals/components/misc/statuses";
 
 const VerifyOTPPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const email = useSelector((state) => state.auth.email);
+    const {email, status} = useSelector((state) => state.auth.email);
 
     const [otp, setOtp] = useState(["", "", "", ""]);
     const [error, setError] = useState("");
@@ -114,10 +114,10 @@ const VerifyOTPPage = () => {
     };
 
       // Loading
-  if (STATUSES.LOADING) {
+if (status === STATUSES.LOADING) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader message="Loading..."/>
+        <Loader />
       </div>
     );
   }
