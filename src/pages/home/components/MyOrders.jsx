@@ -472,7 +472,7 @@ export default function MyOrders() {
                           {/* Image */}
                           <div className="w-20 h-20 shrink-0 rounded-lg bg-white border border-slate-200 p-2">
                             <img
-                              src={`http://${product?.Product_Image}`}
+                              src={`https://iecomifybackend.onrender.com${product?.Product_Image}`}
                               alt={
                                 product?.Product_Name ||
                                 "Product"
