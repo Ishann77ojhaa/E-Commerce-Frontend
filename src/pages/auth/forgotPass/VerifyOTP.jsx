@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { VerifyOTP } from "../../../store/authSlice";
 import { STATUSES } from "../../../globals/components/misc/statuses";
+import Loader from "../../../globals/components/loader/loader";
 
 const VerifyOTPPage = () => {
     const navigate = useNavigate();

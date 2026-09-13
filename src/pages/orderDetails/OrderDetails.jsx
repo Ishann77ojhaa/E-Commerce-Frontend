@@ -215,7 +215,7 @@ const handleUpdateOrder = async () => {
                       {/* Image */}
                       <div className="w-24 h-24 shrink-0 bg-slate-100 rounded-lg p-2">
                         <img
-                          src={`http://${product?.Product_Image}`}
+                          src={`https://iecomifybackend.onrender.com${product?.Product_Image}`}
                           alt={
                             product?.Product_Name ||
                             "Product"
